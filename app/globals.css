@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+:root {
+  height: 100%;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -24,4 +30,52 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+input,
+textarea {
+  @apply border-2 border-gray-300 rounded-md px-1 w-full mb-2;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input:focus,
+textarea:focus {
+  @apply border-blue-900;
+}
+
+.nav-content {
+  @apply flex flex-row gap-2 text-center w-full px-4 py-3 border-b-2 border-slate-500  hover:bg-slate-300 hover:text-black;
+}
+
+.nav-content-svg {
+  @apply w-5 h-5 mt-1;
+}
+
+.btn-primary-white {
+  @apply bg-white text-black px-4 rounded-md py-1 border border-black;
+}
+
+.btn-primary-black {
+  @apply bg-black text-white px-4 rounded-md py-1 border border-white;
+}
+
+.table {
+  @apply table-auto w-full text-left my-3 bg-black border-slate-500 border-2 overflow-hidden max-w-7xl;
+}
+
+.table-content {
+  @apply px-3 py-2 border-b  border-slate-500 overflow-hidden break-words;
+}
+
+.form-produk-title{
+  @apply font-bold text-base
 }

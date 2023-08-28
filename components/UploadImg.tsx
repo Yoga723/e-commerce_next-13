@@ -1,0 +1,93 @@
+"use client";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { UploadImgProps } from "@/types";
+
+const UploadImg = ({ produkData }: UploadImgProps) => {
+  const [imagePreview, setImagePreview] = useState<File[]>([]);
+
+  const uploadImage = async (e: any) => {
+    e.preventDefault();
+    const files = e.target?.files; // Ngambil value object files yang berasal dari event target
+    if (files?.length > 0) {
+      const formData = new FormData(); // Convert filena jadi object HTMLFormElement FormData. Alasannya agar mudah di parse saat di bagian backend
+      setImagePreview(files);
+
+      for (const file of files) {
+        // Memasukkan semua properti dan value dari file kedalam formData. formData disini adalah object. Jadi {file: [props gambar/file], file: [...], dst}
+        formData.append("file", file);
+      }
+      const upload = await fetch("/api/uploadimages", {
+        method: "POST",
+        body: formData,
+      });
+      console.log(upload);
+      // return upload;
+    }
+  };
+
+  useEffect(() => {
+    console.log(imagePreview);
+  }, [imagePreview]);
+
+  return (
+    <div className=" w-full mb-2">
+      <label className="relative flex flex-col items-center justify-center w-full h-56 rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 object-contain">
+        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+          <svg
+            className="w-8 h-8 mb-4 text-black"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 16"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+            />
+          </svg>
+          <p className="mb-2 text-sm text-black">
+            <span className="font-semibold">Click untuk upload</span>
+          </p>
+          <p className="text-xs text-black">PNG atau JPG</p>
+        </div>
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={uploadImage}
+          placeholder="Select Image files"
+          className="hidden"
+        />
+        <div className="absolute flex h-full w-full object-contain items-start justify-start ">
+          {Array.from(imagePreview).map((image) => {
+            const src = URL.createObjectURL(image);
+            return (
+              <div
+                className="relative w-96 h-full mx-2"
+                key={image.name}
+              >
+                <Image
+                  src={src}
+                  alt="images"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            );
+          })}
+        </div>
+      </label>
+      <div className="flex flex-row max-w-md max-h-md relative"></div>
+      {produkData?.images == undefined ||
+        (!produkData?.images.length && (
+          <div>Tidak ada photo untuk produk ini !</div>
+        ))}
+    </div>
+  );
+};
+
+export default UploadImg;
