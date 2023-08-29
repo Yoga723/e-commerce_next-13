@@ -1,4 +1,3 @@
-"use client";
 import { Footer } from "@/components";
 import "./globals.css";
 import type { Metadata } from "next";
