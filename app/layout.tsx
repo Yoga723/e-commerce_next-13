@@ -20,9 +20,7 @@ export default function RootLayout({
         <NextAuthProvider>
           {/* BrowserRouter diganti jadi Hash soalna kabeh saengges # diaggap client side fragment jadi te nyebabken error
           While this approach is easier and doesn't require server configuration, it does mean your URLs will contain #, which might not be as clean or SEO-friendly. */}
-          {/* <BrowserRouter> */}
           {children}
-          {/* </BrowserRouter> */}
         </NextAuthProvider>
         {/* <Footer /> */}
       </body>

@@ -37,17 +37,17 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       if (FormMethod == "POST") {
         // Jika methodnya POST
 
-        // if (!imageData == null) {
-        //   const uploadImage = await fetch("/api/uploadimages", {
-        //     method: "POST",
-        //     body: imageData,
-        //   }).then((res) => res.json());
+        if (!imageData == null) {
+          const uploadImage = await fetch("/api/uploadimages", {
+            method: "POST",
+            body: imageData,
+          }).then((res) => res.json());
 
-        //   const props = { uploadImage }; // Props.uploadImage = array []
-        //   console.log(props.uploadImage);
-        // }
+          const props = { uploadImage }; // Props.uploadImage = array []
+          console.log(props.uploadImage);
+        }
         await axios.post("/api/produk", data);
-
+        
       } else if (FormMethod == "UPDATE") {
         // Jika methodnya UPDATE
         await axios.put("/api/produk", { ...data, _id });
