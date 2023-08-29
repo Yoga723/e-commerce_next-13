@@ -1,4 +1,4 @@
-import { Footer } from "@/components";
+import { Footer, NextAuthProvider } from "@/components";
 import "./globals.css";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
@@ -17,11 +17,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
+        <NextAuthProvider>
           {/* BrowserRouter diganti jadi Hash soalna kabeh saengges # diaggap client side fragment jadi te nyebabken error
           While this approach is easier and doesn't require server configuration, it does mean your URLs will contain #, which might not be as clean or SEO-friendly. */}
-          <HashRouter>{children}</HashRouter>
-        </SessionProvider>
+          {/* <BrowserRouter> */}
+          {children}
+          {/* </BrowserRouter> */}
+        </NextAuthProvider>
         {/* <Footer /> */}
       </body>
     </html>
