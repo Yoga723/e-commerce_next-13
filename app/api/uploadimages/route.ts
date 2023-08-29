@@ -3,9 +3,8 @@ import { Produk } from "@/models/Produk";
 import { NextResponse, NextRequest } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
-export const config = {
-  api: { bodyParser: false },
-};
+export const dynamic = "force-dynamic";
+// 'auto' | 'force-dynamic' | 'error' | 'force-static'
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
