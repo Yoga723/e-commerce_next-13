@@ -3,8 +3,18 @@ import { Produk } from "@/models/Produk";
 import { NextResponse, NextRequest } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
+export const config = {
+  api: { bodyParser: false },
+};
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_APIKEY,
+  api_secret: process.env.CLOUDINARY_APISECRET,
+  secure: true,
+});
 // Fungsi asinkron untuk menangani permintaan POST
-export async function POST(req: Request, res) {
+export async function POST(req: NextRequest, res) {
   // Ambil data form dari request UploadImg.tsx
   const formData = await req.formData();
 
@@ -38,15 +48,3 @@ export async function POST(req: Request, res) {
 
   return NextResponse.json(cloudinaryProps);
 }
-
-export const config = {
-  api: { bodyParser: false },
-};
-export const runtime = "nodejs";
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_APIKEY,
-  api_secret: process.env.CLOUDINARY_APISECRET,
-  secure: true,
-});
