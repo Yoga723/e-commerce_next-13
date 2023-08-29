@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
 // Fungsi asinkron untuk menangani permintaan POST
-export async function POST(req: NextRequest, res) {
+export async function POST(req: Request, res) {
   // Ambil data form dari request UploadImg.tsx
   const formData = await req.formData();
 
