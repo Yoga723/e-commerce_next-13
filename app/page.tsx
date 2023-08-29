@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRoutes } from "react-router-dom";
