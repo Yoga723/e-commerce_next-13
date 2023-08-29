@@ -9,6 +9,8 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [imageData, setImageData] = useState<FormData | null>(null);
+  // Contoh Isi dari statenya : File { name: "AlphaCWPlume.jpg", lastModified: 1689848943250, webkitRelativePath: "", size: 1752841, type: "image/jpeg" }
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +18,9 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       setTitle(produkData.title || "");
       setDescription(produkData.description || "");
       setPrice(produkData.price.toString() || "");
+    }
+    if (imageData instanceof FormData) {
+      // console.log(imageData.get("file"));
     }
   }, [produkData]);
 
@@ -31,7 +36,18 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
 
       if (FormMethod == "POST") {
         // Jika methodnya POST
+
+        if (!imageData == null) {
+          const uploadImage = await fetch("/api/uploadimages", {
+            method: "POST",
+            body: imageData,
+          }).then((res) => res.json());
+
+          const props = { uploadImage }; // Props.uploadImage = array []
+          console.log(props.uploadImage);
+        }
         await axios.post("/api/produk", data);
+        
       } else if (FormMethod == "UPDATE") {
         // Jika methodnya UPDATE
         await axios.put("/api/produk", { ...data, _id });
@@ -52,7 +68,12 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
     <div className="w-full h-full overflow-y-scroll object-contain">
       <div className="max-w-5xl">
         <form onSubmit={handleSubmit}>
-          <label htmlFor="produk" className="form-produk-title">Produk :</label>
+          <label
+            htmlFor="produk"
+            className="form-produk-title"
+          >
+            Produk :
+          </label>
           <input
             type="text"
             name="produk"
@@ -60,7 +81,12 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <label htmlFor="price" className="form-produk-title">Price (Rp.):</label>
+          <label
+            htmlFor="price"
+            className="form-produk-title"
+          >
+            Price (Rp.):
+          </label>
           <input
             type="number"
             name="harga"
@@ -68,14 +94,27 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
-          <label htmlFor="description" className="form-produk-title">Description :</label>
+          <label
+            htmlFor="description"
+            className="form-produk-title"
+          >
+            Description :
+          </label>
           <textarea
             placeholder="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          <label htmlFor="" className="form-produk-title">Photo :</label>
-          <UploadImg produkData={produkData} />
+          <label
+            htmlFor=""
+            className="form-produk-title"
+          >
+            Photo :
+          </label>
+          <UploadImg
+            produkData={produkData}
+            setImageData={setImageData}
+          />
           <div className="my-4">
             <button
               className="btn-primary-white mr-2"

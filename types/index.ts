@@ -18,5 +18,6 @@ export interface FormMethodProps {
 }
 
 export interface UploadImgProps {
-  produkData?: ProdukProps,
+  produkData?: ProdukProps;
+  setImageData?: (data: FormData) => void;
 }

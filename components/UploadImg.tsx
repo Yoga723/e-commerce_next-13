@@ -3,32 +3,24 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { UploadImgProps } from "@/types";
 
-const UploadImg = ({ produkData }: UploadImgProps) => {
+const UploadImg = ({ produkData, setImageData }: UploadImgProps) => {
   const [imagePreview, setImagePreview] = useState<File[]>([]);
 
   const uploadImage = async (e: any) => {
     e.preventDefault();
-    const files = e.target?.files; // Ngambil value object files yang berasal dari event target
-    if (files?.length > 0) {
-      const formData = new FormData(); // Convert filena jadi object HTMLFormElement FormData. Alasannya agar mudah di parse saat di bagian backend
+    const files = e.target.files; // Ngambil value object files yang berasal dari event target
+    
+    if (files && files.length > 0) {
+      const imageData = new FormData(); // Convert filena jadi object HTMLFormElement imageData. Alasannya agar mudah di parse saat di bagian backend
       setImagePreview(files);
 
       for (const file of files) {
-        // Memasukkan semua properti dan value dari file kedalam formData. formData disini adalah object. Jadi {file: [props gambar/file], file: [...], dst}
-        formData.append("file", file);
+        // Memasukkan semua properti dan value dari file kedalam imageData. imageData disini adalah object. Jadi {file: [props gambar/file], file: [...], dst}
+        imageData.append("file", file);
       }
-      const upload = await fetch("/api/uploadimages", {
-        method: "POST",
-        body: formData,
-      });
-      console.log(upload);
-      // return upload;
+      setImageData(imageData);
     }
   };
-
-  useEffect(() => {
-    console.log(imagePreview);
-  }, [imagePreview]);
 
   return (
     <div className=" w-full mb-2">

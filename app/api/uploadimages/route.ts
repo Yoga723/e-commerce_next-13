@@ -1,42 +1,53 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Produk } from "@/models/Produk";
 import { NextResponse, NextRequest } from "next/server";
-import { join, resolve } from "path";
-import { writeFile } from "fs/promises";
+import { v2 as cloudinary } from "cloudinary";
+
+// Fungsi asinkron untuk menangani permintaan POST
+export async function POST(req: NextRequest, res) {
+  // Ambil data form dari request UploadImg.tsx
+  const formData = await req.formData();
+
+  // Ambil semua berkas dari formData dengan key "file"
+  // contoh : File { name: "AlphaCWPlume.jpg", type: "image/jpeg" }
+  const files: File[] | null = formData.getAll("file") as unknown as File[];
+
+
+  // Jika berkas tidak ada, kembalikan respons dengan kesalahan
+  if (!files) {
+    return NextResponse.json({ success: false, message: "No file uploaded!" });
+  }
+
+  const cloudinaryProps = [];
+
+  for (const file of files) {
+    // Mengkonversi berkas menjadi format ArrayBuffer/biner
+    const bytes = await file.arrayBuffer();
+
+    // Konversi ArrayBuffer ke Base64 untuk upload ke Cloudinary
+    const base64Image = Buffer.from(bytes).toString("base64");
+    const encodedImage = `data:image/jpeg;base64,${base64Image}`;
+
+    // Upload gambar ke Cloudinary
+    const photoURL = await cloudinary.uploader.upload(encodedImage, {
+      public_id: file.name,
+    });
+    cloudinaryProps.push(photoURL);
+
+    console.log("Upload Image Berhasil", file.name);
+  }
+
+  return NextResponse.json(cloudinaryProps);
+}
+
 
 export const config = {
   api: { bodyParser: false },
 };
 
-// Fungsi asinkron untuk menangani permintaan POST
-export async function POST(req: NextRequest, res) {
-  // Mendapatkan data form dari permintaan yang masuk dari UploadImg.tsx
-  const formData = await req.formData();
-
-  // Mengambil berkas dari formData. Jika tidak ada, nilainya akan null
-  const file: File | null = formData.get("file") as unknown as File;  // formData.get('file) teh ngambil key 'file' dan value dari formDatana
-
-  // Mengambil direktori saat ini dari proyek yang sedang berjalan
-  const cwd = process.cwd();
-  console.log(formData.get('file'))
-
-  // Jika berkas tidak ada, kembalikan respons dengan kesalahan
-  if (!file) {
-    return NextResponse.json({ success: false, message: "No file uploaded!" });
-  }
-
-  // Mengkonversi berkas menjadi ArrayBuffer/biner
-  const bytes = await file.arrayBuffer();
-
-  // Mengkonversi ArrayBuffer menjadi Buffer
-  const buffer = Buffer.from(bytes);
-
-  // Menentukan lokasi penyimpanan berkas di sistem, yaitu di direktori tmp
-  const path = join(cwd, "tmp", file.name);
-
-  // Menulis berkas ke lokasi yang ditentukan
-  const resultImage = await writeFile(path, buffer);
-
-  // Mengembalikan respons sukses
-  return NextResponse.json("Ok");
-}
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_APIKEY,
+  api_secret: process.env.CLOUDINARY_APISECRET,
+  secure: true,
+});
