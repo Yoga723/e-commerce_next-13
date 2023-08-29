@@ -12,7 +12,6 @@ export async function POST(req: NextRequest, res) {
   // contoh : File { name: "AlphaCWPlume.jpg", type: "image/jpeg" }
   const files: File[] | null = formData.getAll("file") as unknown as File[];
 
-
   // Jika berkas tidak ada, kembalikan respons dengan kesalahan
   if (!files) {
     return NextResponse.json({ success: false, message: "No file uploaded!" });
@@ -40,10 +39,10 @@ export async function POST(req: NextRequest, res) {
   return NextResponse.json(cloudinaryProps);
 }
 
-
 export const config = {
   api: { bodyParser: false },
 };
+export const runtime = "nodejs";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
