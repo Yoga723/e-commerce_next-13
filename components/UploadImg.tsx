@@ -18,7 +18,7 @@ const UploadImg = ({ produkData, setImageData }: UploadImgProps) => {
         // Memasukkan semua properti dan value dari file kedalam imageData. imageData disini adalah object. Jadi {file: [props gambar/file], file: [...], dst}
         imageData.append("file", file);
       }
-      setImageData(imageData);
+      setImageData!(imageData);
     }
   };
 

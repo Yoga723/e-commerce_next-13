@@ -7,6 +7,6 @@ export const mongooseConnect = () => {
   if (mongoose.connection.readyState == 1) {
     mongoose.connection.asPromise();
   } else {
-    return mongoose.connect(uri);
+    return mongoose.connect(uri!);
   }
 };
