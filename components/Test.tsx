@@ -5,9 +5,9 @@ import { BrowserRouter, HashRouter } from "react-router-dom";
 
 const Test = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
     <Hero/>
-  </HashRouter>
+  </BrowserRouter>
   )
 }
 

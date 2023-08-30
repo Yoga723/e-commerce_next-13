@@ -1,8 +1,6 @@
 import { Footer, NextAuthProvider } from "@/components";
 import "./globals.css";
 import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
-import { BrowserRouter, HashRouter } from "react-router-dom";
 
 export const metadata: Metadata = {
   title: "E-Commerce from scratch with Coding with Dawid || Yoga723",

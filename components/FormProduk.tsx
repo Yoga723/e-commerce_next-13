@@ -35,7 +35,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       if (FormMethod == "POST") {
         // Jika methodnya POST
 
-        if (!imageData == null) {
+        if (imageData != null) {
           const uploadImage = await fetch("/api/uploadimages", {
             method: "POST",
             body: imageData,
