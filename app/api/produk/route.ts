@@ -1,6 +1,7 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Produk } from "@/models/Produk";
 import { NextResponse, NextRequest } from "next/server";
+import { AxiosError } from "axios";
 
 export const POST = async (req: any, res: any) => {
   const { title, description, price } = await req.json(); // Dekonstruksikan data yang dikirim dari new
@@ -32,16 +33,21 @@ export const DELETE = async (req: any, res: any) => {
   try {
     await Produk.deleteOne({ _id: id });
     return NextResponse.json(true);
-  } catch (error) {
-    if (error) {
-      // The request was made and the server responded with a status code outside of the 2xx range
-      console.log(error.response.data);
-      console.log(error.response.status);
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (
+        err.response?.status === 400 &&
+        err.response?.data.code === "CATEGORY_ALREADY_EXIST"
+      ) {
+        console.log("Category exists");
+      }
+    } else {
+      console.log("Unexpected error", err);
     }
   }
 };
 
-export const GET = async (req:any, res:any) => {
+export const GET = async (req: any, res: any) => {
   mongooseConnect();
   console.log("INI METHOD GET");
   // Mengambil value dari Parameter search atau setelah ?. Misal ?id=12&price=1222 Maka {id:12, price: 1222}

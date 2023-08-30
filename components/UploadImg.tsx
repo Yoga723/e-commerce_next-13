@@ -8,7 +8,7 @@ const UploadImg = ({ produkData, setImageData }: UploadImgProps) => {
 
   const uploadImage = async (e: any) => {
     e.preventDefault();
-    const files = e.target.files; // Ngambil value object files yang berasal dari event target
+    const files = e.target?.files; // Ngambil value object files yang berasal dari event target
     
     if (files && files.length > 0) {
       const imageData = new FormData(); // Convert filena jadi object HTMLFormElement imageData. Alasannya agar mudah di parse saat di bagian backend

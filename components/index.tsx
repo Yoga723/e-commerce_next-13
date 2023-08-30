@@ -5,7 +5,7 @@ import Pesanan from "./Pesanan";
 import Produk from "./Produk";
 import Settings from "./Settings";
 import Loader from "./Loader";
-import { NextAuthProvider } from "./Provider";
+import { NextAuthProvider } from "./NextAuthProvider";
 import Hero from "./Hero";
 import Test from "./Test";
 

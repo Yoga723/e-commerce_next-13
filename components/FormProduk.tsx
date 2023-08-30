@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UploadImg from "./UploadImg";
@@ -18,9 +19,6 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       setTitle(produkData.title || "");
       setDescription(produkData.description || "");
       setPrice(produkData.price.toString() || "");
-    }
-    if (imageData instanceof FormData) {
-      // console.log(imageData.get("file"));
     }
   }, [produkData]);
 
@@ -53,12 +51,18 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
         await axios.put("/api/produk", { ...data, _id });
         console.log("Ini Akan mengupdate Data");
       }
-    } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code outside of the 2xx range
-        console.log(error.response.data);
-        console.log(error.response.status);
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (
+          err.response?.status === 400 &&
+          err.response?.data.code === "CATEGORY_ALREADY_EXIST"
+        ) {
+          console.log("Category exists");
+        }
+      } else {
+        console.log("Unexpected error", err);
       }
+    
     } finally {
       navigate("/produk");
     }

@@ -37,9 +37,9 @@ const Produk = () => {
           </>
         ) : (
           <>
-            {daftarProduk.map((produk) => (
-              <tbody className="w-full">
-                <tr className=" py-3">
+            <tbody className="w-full">
+              {daftarProduk.map((produk) => (
+                <tr className=" py-3" key={produk._id}>
                   <td className="table-content text-white border-r-2">
                     {produk.title}
                   </td>
@@ -72,8 +72,8 @@ const Produk = () => {
                     </Link>
                   </td>
                 </tr>
-              </tbody>
-            ))}
+              ))}
+            </tbody>
           </>
         )}
       </table>

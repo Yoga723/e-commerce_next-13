@@ -6,9 +6,9 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 
 const DeleteProduk = () => {
   const [produkData, setProdukData] = useState({
-    _id: "",
-    title: "",
-    description: "",
+    _id: ``,
+    title: ``,
+    description: ``,
     price: 0,
     __v: 0,
   });
@@ -36,7 +36,7 @@ const DeleteProduk = () => {
 
   return (
     <div>
-      <h2>Apa Anda yakin ingin menghapus produk "{produkData.title}" ?</h2>
+      <h2>Apa Anda yakin ingin menghapus produk `{produkData.title}` ?</h2>
       <table className="table">
         <tbody className="text-white">
           <tr className="">
