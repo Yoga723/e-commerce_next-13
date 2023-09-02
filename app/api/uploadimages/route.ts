@@ -3,9 +3,9 @@ import { Produk } from "@/models/Produk";
 import { NextResponse, NextRequest } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
-// export const config = {
-//   api: { bodyParser: false },
-// };
+export const config = {
+  api: { bodyParser: false },
+};
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest, res:any) {
   for (const file of files) {
     // Mengkonversi berkas menjadi format ArrayBuffer/biner
     const bytes = await file.arrayBuffer();
+    console.log("Sedang Menggunggah!");
 
     // Konversi ArrayBuffer ke Base64 untuk upload ke Cloudinary
     const base64Image = Buffer.from(bytes).toString("base64");

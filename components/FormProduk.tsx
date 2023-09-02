@@ -2,17 +2,19 @@
 import axios from "axios";
 import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import UploadImg from "./UploadImg";
 import { FormMethodProps } from "@/types";
+import { useRouter } from "next/navigation";
+import { Navigation } from ".";
 
 const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [imgurl, setImgurl] = useState("");
   const [imageData, setImageData] = useState<FormData | null>(null);
   // Contoh Isi dari statenya : File { name: "AlphaCWPlume.jpg", lastModified: 1689848943250, webkitRelativePath: "", size: 1752841, type: "image/jpeg" }
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (produkData) {
@@ -26,7 +28,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Minta request APIna ie make Axios
-    const data = { title, description, price };
+    const data = { title, description, price, imgurl };
     const _id = produkData?._id;
 
     try {
@@ -39,13 +41,13 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
           const uploadImage = await fetch("/api/uploadimages", {
             method: "POST",
             body: imageData,
-          }).then((res) => res.json());
+          }).then((res) => setImgurl(res.url));
 
           const props = { uploadImage }; // Props.uploadImage = array []
           console.log(props.uploadImage);
         }
         await axios.post("/api/produk", data);
-        
+        console.log("Selesai Upload");
       } else if (FormMethod == "UPDATE") {
         // Jika methodnya UPDATE
         await axios.put("/api/produk", { ...data, _id });
@@ -62,15 +64,16 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       } else {
         console.log("Unexpected error", err);
       }
-    
     } finally {
-      navigate("/produk");
+      router.push("/produks");
     }
   };
 
   return (
-    <div className="w-full h-full overflow-y-scroll object-contain">
-      <div className="max-w-5xl">
+    <div className="flex w-auto h-screen object-contain">
+      <Navigation />
+      <div className="w-screen h-full p-2 text-black bg-slate-500">
+        <h1 className="font-bold text-xl mb-2">{FormMethod} :</h1>
         <form onSubmit={handleSubmit}>
           <label
             htmlFor="produk"
@@ -124,7 +127,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
               className="btn-primary-white mr-2"
               type="button"
               onClick={() => {
-                navigate("/produk");
+                router.push("/produks");
               }}
             >
               Kembali

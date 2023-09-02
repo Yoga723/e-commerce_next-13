@@ -4,13 +4,14 @@ import { NextResponse, NextRequest } from "next/server";
 import { AxiosError } from "axios";
 
 export const POST = async (req: any, res: any) => {
-  const { title, description, price } = await req.json(); // Dekonstruksikan data yang dikirim dari new
+  const { title, description, price, imgurl } = await req.json(); // Dekonstruksikan data yang dikirim dari new
   mongooseConnect();
 
   const produkData = await Produk.create({
     title,
     description,
     price,
+    imgurl,
   });
 
   console.log("POST REQUEST DONE");
@@ -64,6 +65,5 @@ export const GET = async (req: any, res: any) => {
     }
   } catch (error) {
     console.error("Error fetching products:", error);
-    // res.status(500).json({ message: "Internal Server Error" });
   }
 };

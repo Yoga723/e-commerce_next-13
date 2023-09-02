@@ -1,13 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import FormProduk from "@/components/FormProduk";
 import { ProdukProps } from "@/types";
 
-const EditProduk = () => {
-  const { _id } = useParams(); // Men dekonstruksi data yang diterima dari Produk => Edit
+const EditProduk = ({ params }: { params: { id: string } }) => {
+  const _id = params.id;
   const [produkData, setProdukData] = useState<ProdukProps>({
     _id: "",
     title: "",
@@ -32,9 +31,6 @@ const EditProduk = () => {
     <div className="w-full object-contain overflow-y-auto">
       {produkData && (
         <>
-          <h1 className="mb-2 text-xl">
-            Edit Produk : <span className="font-bold">{produkData.title}</span>
-          </h1>
           <FormProduk
             FormMethod={"UPDATE"}
             produkData={produkData}

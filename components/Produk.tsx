@@ -2,7 +2,7 @@
 import { ProdukProps } from "@/types";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Loader } from ".";
 
 const Produk = () => {
@@ -49,9 +49,12 @@ const Produk = () => {
                   <td className="table-content text-slate-500 border-r-2 ">
                     {produk.description}
                   </td>
+                  <td>
+                    <Image src={produk.imgurl} alt={produk.title}/>
+                  </td>
                   <td className="flex w-full items-center justify-center px-3 py-2 border-b border-gray-700  ">
                     <Link
-                      to={`/produk/edit/${produk._id}`}
+                      href={`/produks/edit/${produk._id}`}
                       className="relative inline-block text-lg group"
                     >
                       <span className="relative z-10 block px-5 py-2 overflow-hidden font-medium leading-tight text-gray-800 transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
@@ -61,7 +64,7 @@ const Produk = () => {
                       </span>
                     </Link>
                     <Link
-                      to={`/produk/delete/${produk._id}`}
+                      href={`/produks/delete/${produk._id}`}
                       className="relative inline-block text-lg group ml-3"
                     >
                       <span className="relative z-10 block px-5 py-2 overflow-hidden font-medium leading-tight text-gray-800 transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
@@ -78,7 +81,7 @@ const Produk = () => {
         )}
       </table>
       <Link
-        to={`/produk/new`}
+        href={`/produks/new`}
         className="absolute right-5 bg-black text-white py-1 px-2 rounded-lg"
       >
         Tambah produk baru

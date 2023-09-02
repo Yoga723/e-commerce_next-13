@@ -1,22 +1,22 @@
 "use client";
 import Image from "next/image";
-import { Link, NavLink } from "react-router-dom";
+import Link from "next/link";
 import React, { useState } from "react";
 import { NavigationProps } from "@/types";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-// Disini ada dua cara untuk mengambil link navigasi yang sedang aktif.
-// 1. Mengambil pathname. Seperti /setting atau /produk.
-// 2. Menggunakan <NavLink> bukannya <Link>
-const Navigation = ({ userIMG, userName }: NavigationProps) => {
-  const location = useLocation().pathname;
-
+const Navigation = ({}: NavigationProps) => {
   const activeLink = "bg-gradient-to-r from-slate-600 ";
+  const { data: session } = useSession(); // Sesi akun ke goggle, dll
+  const userIMG = session?.user?.image?.toString();
+  const userName = session?.user?.name?.toString();
+  const pathName = usePathname()
   return (
-    <aside className="z-20">
+    <aside className="z-20 w-auto">
       <Link
-        to={"/"}
-        className="flex text-white p-4"
+        href={"/"}
+        className="flex text-white p-4 justify-center items-center"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -36,13 +36,13 @@ const Navigation = ({ userIMG, userName }: NavigationProps) => {
         <span>Ecommerce Admin</span>
       </Link>
 
-      <div className="flex w-full ">
-        <div className="flex flex-row gap-2 text-center w-full px-4 py-3 border-b-2 border-slate-500 ">
+      <div className="flex w-full">
+        <div className="flex flex-row gap-2 text-center w-full px-2 py-3 border-b-2 border-slate-500 ">
           <Image
             src={userIMG || "/public/vercel.svg"}
             alt="images"
-            width={25}
-            height={25}
+            width={30}
+            height={30}
             className="rounded-3xl"
           />
           <p>{userName}</p>
@@ -58,8 +58,8 @@ const Navigation = ({ userIMG, userName }: NavigationProps) => {
 
       <nav className={`flex flex-col`}>
         <Link
-          to={`/`}
-          className={`nav-content ${location == "/" ? activeLink : ""}`}
+          href={`/`}
+          className={`nav-content ${pathName == "/" ? activeLink : ""}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,8 +77,10 @@ const Navigation = ({ userIMG, userName }: NavigationProps) => {
           <p>Dashboard</p>
         </Link>
         <Link
-          to={`/pesanan`}
-          className={`nav-content ${location === "/pesanan" ? activeLink : ""}`}
+          href={`/pesanan`}
+          className={`nav-content ${
+            pathName === "/pesanan" ? activeLink : ""
+          }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -96,8 +98,10 @@ const Navigation = ({ userIMG, userName }: NavigationProps) => {
           <p>Pesanan</p>
         </Link>
         <Link
-          to={`/produk`}
-          className={`nav-content ${location === "/produk" ? activeLink : ""}`}
+          href={`/produks`}
+          className={`nav-content ${
+            pathName === "/produks" ? activeLink : ""
+          }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -115,11 +119,9 @@ const Navigation = ({ userIMG, userName }: NavigationProps) => {
 
           <p>produk</p>
         </Link>
-        <NavLink
-          to={`/settings`}
-          className={({ isActive }) =>
-            isActive ? `nav-content ${activeLink}` : "nav-content"
-          }
+        <Link
+          href={`/settings`}
+          className={`nav-content `}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +137,7 @@ const Navigation = ({ userIMG, userName }: NavigationProps) => {
           </svg>
 
           <p className="">Settings</p>
-        </NavLink>
+        </Link>
       </nav>
     </aside>
   );
