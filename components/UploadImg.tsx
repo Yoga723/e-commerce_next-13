@@ -3,13 +3,21 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { UploadImgProps } from "@/types";
 
-const UploadImg = ({ produkData, setImageData }: UploadImgProps) => {
+const UploadImg = ({ produkData, imageData, setImageData }: UploadImgProps) => {
   const [imagePreview, setImagePreview] = useState<File[]>([]);
+  const [imagePreviewLink, setImagePreviewLink] = useState([]);
+
+  useEffect(() => {
+    if (imageData) {
+      setImagePreviewLink!(imageData);
+      console.log(imagePreviewLink);
+    }
+  }, [produkData, imageData, imagePreviewLink]);
 
   const uploadImage = async (e: any) => {
     e.preventDefault();
     const files = e.target?.files; // Ngambil value object files yang berasal dari event target
-    
+
     if (files && files.length > 0) {
       const imageData = new FormData(); // Convert filena jadi object HTMLFormElement imageData. Alasannya agar mudah di parse saat di bagian backend
       setImagePreview(files);
@@ -35,9 +43,9 @@ const UploadImg = ({ produkData, setImageData }: UploadImgProps) => {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
             />
           </svg>
@@ -71,6 +79,22 @@ const UploadImg = ({ produkData, setImageData }: UploadImgProps) => {
               </div>
             );
           })}
+          {/* Tambahan guard clause make if. Men imagePreviewLink array karek map, men file return kosong, kitu hela jang ayenamah */}
+          {/* {imagePreviewLink.map((image) => {
+            return (
+              <div
+                className="relative w-96 h-full mx-2"
+                key={image}
+              >
+                <Image
+                  src={image}
+                  alt="images"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            );
+          })} */}
         </div>
       </label>
       <div className="flex flex-row max-w-md max-h-md relative"></div>

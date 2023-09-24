@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { Navigation, Pesanan, Settings, Produk, Hero } from "@/components";
-import { New, DeleteProduk, EditProduk } from ".";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { Navigation,Produk } from "@/components";
 
 export default function Produks() {
   if (process.browser) {

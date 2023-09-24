@@ -12,7 +12,7 @@ const EditProduk = ({ params }: { params: { id: string } }) => {
     title: "",
     description: "",
     price: 0,
-    images: undefined,
+    imgurl: undefined,
     __v: 0,
   });
 
@@ -23,7 +23,6 @@ const EditProduk = ({ params }: { params: { id: string } }) => {
     // Mengirim method GET ke /api/produk dengan tambahan parameter ?id=_id
     axios.get(`/api/produk?id=${_id}`).then((res) => {
       setProdukData(res.data);
-      console.log(res.data);
     });
   }, [_id]);
 

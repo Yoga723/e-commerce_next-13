@@ -41,22 +41,24 @@ const DeleteProduk = ({ params }: { params: { id: string } }) => {
           <tbody className="text-white">
             <tr className="">
               <td className="border-r-2 border-slate-500 p-2">Nama Produk :</td>
-              <td className="p-2 text-slate-500 break-words">Produk 1</td>
+              <td className="p-2 text-slate-500 break-words">
+                {produkData.title}
+              </td>
             </tr>
             <tr className="">
               <td className="border-r-2 border-slate-500 p-2">
                 Harga Produk :
               </td>
-              <td className="p-2 text-slate-500 break-words">50000</td>
+              <td className="p-2 text-slate-500 break-words">
+                {produkData.price}
+              </td>
             </tr>
             <tr className="">
               <td className="border-r-2 border-slate-500 p-2">
                 Deskripsi Produk :
               </td>
               <td className="p-2 text-slate-500 break-words">
-                Produk ini bagus bagaikan sebuah mahakarya. Benda ini dibangun
-                dengan penuh ketelitian yang memikirkan tentang kenyamanan
-                pengguna saat menggunakannya
+                {produkData.description}
               </td>
             </tr>
           </tbody>

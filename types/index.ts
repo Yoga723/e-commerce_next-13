@@ -8,7 +8,7 @@ export interface ProdukProps {
   title: string;
   description?: string;
   price: number;
-  images: any;
+  imgurl: any;
   __v: number;
 }
 
@@ -19,5 +19,6 @@ export interface FormMethodProps {
 
 export interface UploadImgProps {
   produkData?: ProdukProps;
+  imageData?: any;
   setImageData?: (data: FormData) => any;
 }

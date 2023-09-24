@@ -7,23 +7,28 @@ export const POST = async (req: any, res: any) => {
   const { title, description, price, imgurl } = await req.json(); // Dekonstruksikan data yang dikirim dari new
   mongooseConnect();
 
+  // try {
   const produkData = await Produk.create({
     title,
     description,
     price,
     imgurl,
   });
-
+  console.log(produkData);
   console.log("POST REQUEST DONE");
   return NextResponse.json(produkData);
+  // } catch (error) {
+  //   console.error("Error saving to database:", error.message);
+  //   return NextResponse.json({ success: false, message: error.message });
+  // }
 };
 
 export const PUT = async (req: any, res: any) => {
   mongooseConnect();
-  const { title, description, price, _id } = await req.json(); // Dekonstruksikan data yang dikirim dari new
+  const { title, description, price, imgurl, _id } = await req.json(); // Dekonstruksikan data yang dikirim dari new
   await Produk.updateOne(
     { _id: _id },
-    { title: title, description: description, price: price }
+    { title: title, description: description, price: price, imgurl: imgurl }
   );
   return NextResponse.json(true); // Responsena teh jang nga bejaan axios.put() bahwa data ges ka kirim
 };

@@ -11,7 +11,6 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [imgurl, setImgurl] = useState("");
   const [imageData, setImageData] = useState<FormData | null>(null);
   // Contoh Isi dari statenya : File { name: "AlphaCWPlume.jpg", lastModified: 1689848943250, webkitRelativePath: "", size: 1752841, type: "image/jpeg" }
   const router = useRouter();
@@ -21,6 +20,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       setTitle(produkData.title || "");
       setDescription(produkData.description || "");
       setPrice(produkData.price.toString() || "");
+      setImageData(produkData.imgurl || "");
     }
   }, [produkData]);
 
@@ -28,30 +28,39 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Minta request APIna ie make Axios
-    const data = { title, description, price, imgurl };
+    let imgurl = [];
     const _id = produkData?._id;
 
     try {
       alert("Data sedang dikirim, akan segera kembali ke halaman produk!");
 
+      // Jika methodnya POST
+
+      if (imageData != null) {
+        const response = await fetch("/api/uploadimages", {
+          method: "POST",
+          body: imageData,
+        });
+        // Contoh Isi dari Data : Array [ {…}, {…} ]
+        // 0: Object { asset_id: "b0fd964171bc1477f8556451911d3ceb", public_id: "IsomicWater.jpg", version: 1693655795, … }
+        // 1: Object { asset_id: "a81c6c6060a6a1c765dc01cb1a5fb2a5", public_id: "KianaMei.png", version: 1693655799, … }
+        // length: 2
+        const data = await response.json();
+        const imageUrls = await data.map((img: any) => img.url);
+
+        imgurl = imageUrls;
+
+        console.log(imgurl); // Array [ "http://res.cloudinary.com/dof4mcurm/image/upload/v1693655795.jpg", "http://res.cloudinary.com/dof4mcurm/image/upload.jpg" ]
+      }
+
+      const payload = { title, description, price, imgurl };
+
       if (FormMethod == "POST") {
-        // Jika methodnya POST
-
-        if (imageData != null) {
-          const uploadImage = await fetch("/api/uploadimages", {
-            method: "POST",
-            body: imageData,
-          }).then((res) => setImgurl(res.url));
-
-          const props = { uploadImage }; // Props.uploadImage = array []
-          console.log(props.uploadImage);
-        }
-        await axios.post("/api/produk", data);
+        await axios.post("/api/produk", payload);
         console.log("Selesai Upload");
       } else if (FormMethod == "UPDATE") {
         // Jika methodnya UPDATE
-        await axios.put("/api/produk", { ...data, _id });
-        console.log("Ini Akan mengupdate Data");
+        await axios.put("/api/produk", { ...payload, _id });
       }
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -70,9 +79,9 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
   };
 
   return (
-    <div className="flex w-auto h-screen object-contain">
+    <div className="flex h-screen object-contain">
       <Navigation />
-      <div className="w-screen h-full p-2 text-black bg-slate-500">
+      <div className=" w-screen h-full p-3 text-black bg-slate-500">
         <h1 className="font-bold text-xl mb-2">{FormMethod} :</h1>
         <form onSubmit={handleSubmit}>
           <label
@@ -120,6 +129,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
           </label>
           <UploadImg
             produkData={produkData}
+            imageData={imageData}
             setImageData={setImageData}
           />
           <div className="my-4">

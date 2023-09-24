@@ -13,8 +13,9 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_APISECRET,
   secure: true,
 });
+
 // Fungsi asinkron untuk menangani permintaan POST
-export async function POST(req: NextRequest, res:any) {
+export async function POST(req: NextRequest, res: any) {
   // Ambil data form dari request UploadImg.tsx
   const formData = await req.formData();
 
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest, res:any) {
 
     console.log("Upload Image Berhasil", file.name);
   }
+  console.log(cloudinaryProps);
 
   return NextResponse.json(cloudinaryProps);
 }

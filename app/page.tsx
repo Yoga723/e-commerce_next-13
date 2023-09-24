@@ -12,19 +12,19 @@ export default function Home() {
     // code is running in a Node.js environment
   }
   const { data: session } = useSession(); // Sesi akun ke goggle, dll
-  
-  if (session) {
-      const userIMG = session?.user?.image?.toString();
-      const userName = session?.user?.name?.toString();
-    return (
-    <main className="flex h-full">
-      <Navigation/>
 
-      <div className="flex flex-grow p-3 rounded-lg bg-slate-200 text-black">
-        <p>Hello {userName}!</p>
-      </div>
-    </main>
-  );
+  if (session) {
+    const userIMG = session?.user?.image?.toString();
+    const userName = session?.user?.name?.toString();
+    return (
+      <main className="flex h-full">
+        <Navigation />
+
+        <div className="flex flex-grow p-3 rounded-lg bg-slate-200 text-black">
+          <p>Hello {userName}!</p>
+        </div>
+      </main>
+    );
   } else {
     return (
       <div className="flex h-full items-center justify-center">
