@@ -5,7 +5,7 @@ const produkSchema = new Schema({
   title: { type: String, required: true },
   description: String,
   price: { type: Number, required: true },
-  imgurl: [{ type: String }],
+  images: [{ type: String }],
   category: { type: mongoose.Types.ObjectId, ref: "Category" },
 });
 

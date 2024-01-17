@@ -5,18 +5,18 @@ import { UploadImgProps } from "@/types";
 
 const UploadImg = ({ produkData, imageData, setImageData }: UploadImgProps) => {
   const [imagePreview, setImagePreview] = useState<File[]>([]);
-  const [imagePreviewLink, setImagePreviewLink] = useState([]);
+  const [imagePreviewLink, setImagePreviewLink] = useState([]); // Link gambar dari cloudinary
 
   useEffect(() => {
     if (imageData) {
       setImagePreviewLink!(imageData);
-      console.log(imagePreviewLink);
     }
-  }, [produkData, imageData, imagePreviewLink]);
+  }, [produkData, imageData]);
 
+  // Convert file images jadi formdata dan di masukkan ke imageData
   const uploadImage = async (e: any) => {
     e.preventDefault();
-    const files = e.target?.files; // Ngambil value object files yang berasal dari event target
+    const files = e.target?.files; // Ngambil value object files yang berasal dari event target. Intina ambil data gambar lah
 
     if (files && files.length > 0) {
       const imageData = new FormData(); // Convert filena jadi object HTMLFormElement imageData. Alasannya agar mudah di parse saat di bagian backend
@@ -59,44 +59,46 @@ const UploadImg = ({ produkData, imageData, setImageData }: UploadImgProps) => {
           multiple
           accept="image/*"
           onChange={uploadImage}
-          placeholder="Select Image files"
           className="hidden"
         />
+        {/* Mapping dam preview image yang akan di upload */}
         <div className="absolute flex h-full w-full object-contain items-start justify-start ">
-          {Array.from(imagePreview).map((image) => {
-            const src = URL.createObjectURL(image);
-            return (
-              <div
-                className="relative w-96 h-full mx-2"
-                key={image.name}
-              >
-                <Image
-                  src={src}
-                  alt="images"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            );
-          })}
-          {/* Tambahan guard clause make if. Men imagePreviewLink array karek map, men file return kosong, kitu hela jang ayenamah */}
-          {/* {imagePreviewLink.map((image) => {
-            return (
-              <div
-                className="relative w-96 h-full mx-2"
-                key={image}
-              >
-                <Image
-                  src={image}
-                  alt="images"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            );
-          })} */}
+          {imagePreview.length < 1
+            ? imagePreviewLink.map((image) => {
+                return (
+                  <div
+                    className="relative w-96 h-full mx-2"
+                    key={image}
+                  >
+                    <Image
+                      src={image}
+                      alt="images"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                );
+              })
+            : Array.from(imagePreview).map((image) => {
+              //isi imagePreview jiga kie = FileList [ File ] = 0: File { name: "AplhaCW.jpg", lastModified: 1689848975806, size: 1889575, … }
+                const src = URL.createObjectURL(image);
+                return (
+                  <div
+                    className="relative w-96 h-full mx-2"
+                    key={image.name}
+                  >
+                    <Image
+                      src={src}
+                      alt="images"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                );
+              })}
         </div>
       </label>
+
       <div className="flex flex-row max-w-md max-h-md relative"></div>
       {produkData?.images == undefined ||
         (!produkData?.images.length && (

@@ -14,7 +14,6 @@ const Produk = () => {
     axios.get("/api/produk").then((res) => {
       setLoading(false);
       setDaftarProduk(res.data);
-      console.log(res.data[4]);
     });
   }, []);
 
@@ -45,7 +44,7 @@ const Produk = () => {
               {daftarProduk.map((produk) => {
                 return (
                   <tr
-                    className=" py-3"
+                    className=" odd:bg-gray-900 even:bg-black py-3"
                     key={produk._id}
                   >
                     <td className="table-content text-white border-r-2">
@@ -60,21 +59,22 @@ const Produk = () => {
                       {produk.description}
                     </td>
                     {/* Gambar */}
-                    <td className="text-white border-b border-r-2 border-gray-700 object-contain">
-                      <div className="flex flex-wrap h-full w-full items-center justify-center gap-3">
+                    <td className="table-content text-white border-b border-r-2 border-gray-700 object-contain">
+                      <div className=" max-w-full h-auto items-center justify-center gap-3">
                         {produk.imgurl.map((url: string) => {
                           return (
                             <div
                               key={url}
-                              className="py-3"
+                              className="my-3 relative w-full h-[20vh]"
                             >
                               {url ? (
                                 <Image
                                   src={url}
                                   alt={produk.title}
-                                  width={200}
-                                  height={200}
-                                  className="w-auto h-auto"
+                                  fill
+                                  // width={200}
+                                  // height={200}
+                                  // className="w-52 h-52"
                                   key={produk.imgurl}
                                 />
                               ) : (
@@ -85,6 +85,7 @@ const Produk = () => {
                         })}
                       </div>
                     </td>
+                    {/* Actions */}
                     <td className="px-3 py-2 border-b border-gray-700">
                       <div className="flex h-full w-full items-center justify-center">
                         <Link

@@ -69,11 +69,11 @@ textarea:focus {
 }
 
 .table {
-  @apply w-full h-fit text-left my-3 bg-black border-slate-500 border-2 overflow-hidden max-w-7xl;
+  @apply table-fixed w-full h-auto text-left my-3 bg-black border-slate-500 border-2 overflow-hidden max-w-7xl;
 }
 
 .table-content {
-  @apply flex-wrap items-start px-2 py-2 border-b border-slate-500 overflow-hidden break-all;
+  @apply h-full items-start px-2 py-2 border-b border-slate-500 object-contain ;
 }
 
 .form-produk-title{

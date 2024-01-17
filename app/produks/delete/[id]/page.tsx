@@ -37,15 +37,15 @@ const DeleteProduk = ({ params }: { params: { id: string } }) => {
       <Navigation />
       <div className="w-screen h-full p-2 text-black bg-slate-300">
         <h2>Apa Anda yakin ingin menghapus produk `{produkData.title}` ?</h2>
-        <table className="table">
-          <tbody className="text-white">
-            <tr className="">
+        <table className="table ">
+          <tbody className="text-white ">
+            <tr className="odd:bg-gray-900 even:bg-black py-3">
               <td className="border-r-2 border-slate-500 p-2">Nama Produk :</td>
               <td className="p-2 text-slate-500 break-words">
                 {produkData.title}
               </td>
             </tr>
-            <tr className="">
+            <tr className="odd:bg-gray-900 even:bg-black py-3">
               <td className="border-r-2 border-slate-500 p-2">
                 Harga Produk :
               </td>
@@ -53,7 +53,7 @@ const DeleteProduk = ({ params }: { params: { id: string } }) => {
                 {produkData.price}
               </td>
             </tr>
-            <tr className="">
+            <tr className="odd:bg-gray-900 even:bg-black py-3">
               <td className="border-r-2 border-slate-500 p-2">
                 Deskripsi Produk :
               </td>

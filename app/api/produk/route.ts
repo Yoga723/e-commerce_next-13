@@ -4,33 +4,38 @@ import { NextResponse, NextRequest } from "next/server";
 import { AxiosError } from "axios";
 
 export const POST = async (req: any, res: any) => {
-  const { title, description, price, imgurl } = await req.json(); // Dekonstruksikan data yang dikirim dari new
+  const { title, description, price, images } = await req.json(); // Dekonstruksikan data yang dikirim dari new
   mongooseConnect();
 
-  // try {
-  const produkData = await Produk.create({
-    title,
-    description,
-    price,
-    imgurl,
-  });
-  console.log(produkData);
-  console.log("POST REQUEST DONE");
-  return NextResponse.json(produkData);
-  // } catch (error) {
-  //   console.error("Error saving to database:", error.message);
-  //   return NextResponse.json({ success: false, message: error.message });
-  // }
+  try {
+    const produkData = await Produk.create({
+      title,
+      description,
+      price,
+      images,
+    });
+    console.log("POST REQUEST DONE");
+    return NextResponse.json(produkData);
+  } catch (error: any) {
+    console.error("Error saving to database:", error.message);
+    return NextResponse.json({ success: false, message: error.message });
+  }
 };
 
 export const PUT = async (req: any, res: any) => {
   mongooseConnect();
-  const { title, description, price, imgurl, _id } = await req.json(); // Dekonstruksikan data yang dikirim dari new
-  await Produk.updateOne(
-    { _id: _id },
-    { title: title, description: description, price: price, imgurl: imgurl }
-  );
-  return NextResponse.json(true); // Responsena teh jang nga bejaan axios.put() bahwa data ges ka kirim
+  const { title, description, price, images, _id } = await req.json(); // Dekonstruksikan data yang dikirim dari new
+
+  try {
+    const updatedProdukData = await Produk.updateOne(
+      { _id: _id },
+      { title: title, description: description, price: price, images: images }
+    );
+
+    return NextResponse.json(updatedProdukData); // Responsena teh jang nga bejaan axios.put() bahwa data ges ka kirim
+  } catch (error: any) {
+    return NextResponse.json({ success: false, message: error.message });
+  }
 };
 
 export const DELETE = async (req: any, res: any) => {

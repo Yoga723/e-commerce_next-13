@@ -27,7 +27,7 @@ export default function Home() {
     );
   } else {
     return (
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center">
         <button
           type="button"
           className="bg-white p-2 px-4 text-black font-semibold rounded-md"

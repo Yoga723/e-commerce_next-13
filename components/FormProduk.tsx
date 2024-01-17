@@ -20,7 +20,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       setTitle(produkData.title || "");
       setDescription(produkData.description || "");
       setPrice(produkData.price.toString() || "");
-      setImageData(produkData.imgurl || "");
+      setImageData(produkData.images || "");
     }
   }, [produkData]);
 
@@ -28,14 +28,14 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Minta request APIna ie make Axios
-    let imgurl = [];
+    let images = [];
     const _id = produkData?._id;
 
     try {
       alert("Data sedang dikirim, akan segera kembali ke halaman produk!");
-
       // Jika methodnya POST
 
+      // Upload Gambar - gambar jika ada
       if (imageData != null) {
         const response = await fetch("/api/uploadimages", {
           method: "POST",
@@ -48,12 +48,10 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
         const data = await response.json();
         const imageUrls = await data.map((img: any) => img.url);
 
-        imgurl = imageUrls;
-
-        console.log(imgurl); // Array [ "http://res.cloudinary.com/dof4mcurm/image/upload/v1693655795.jpg", "http://res.cloudinary.com/dof4mcurm/image/upload.jpg" ]
+        images = imageUrls;
       }
 
-      const payload = { title, description, price, imgurl };
+      const payload = { title, description, price, images };
 
       if (FormMethod == "POST") {
         await axios.post("/api/produk", payload);
@@ -82,7 +80,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
     <div className="flex h-screen object-contain">
       <Navigation />
       <div className=" w-screen h-full p-3 text-black bg-slate-500">
-        <h1 className="font-bold text-xl mb-2">{FormMethod} :</h1>
+        <h1 className="font-bold text-xl mb-2">{FormMethod == "POST" ? "Tambah Produk" : "Edit Produk"} :</h1>
         <form onSubmit={handleSubmit}>
           <label
             htmlFor="produk"

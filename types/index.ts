@@ -8,7 +8,7 @@ export interface ProdukProps {
   title: string;
   description?: string;
   price: number;
-  imgurl: any;
+  images: any;
   __v: number;
 }
 

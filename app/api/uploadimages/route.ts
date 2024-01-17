@@ -3,6 +3,8 @@ import { Produk } from "@/models/Produk";
 import { NextResponse, NextRequest } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
+// API untuk upload/POST gambar ke cloudinary
+
 export const config = {
   api: { bodyParser: false },
 };
