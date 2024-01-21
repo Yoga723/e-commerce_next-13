@@ -8,7 +8,6 @@ import Image from "next/image";
 
 const Produk = () => {
   const [daftarProduk, setDaftarProduk] = useState<ProdukProps[]>([]);
-  const [urlGambar, setUrlGambar] = useState();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios.get("/api/produk").then((res) => {
@@ -18,8 +17,20 @@ const Produk = () => {
   }, []);
 
   return (
-    <div className="h-full w-full relative overflow-scroll object-contain">
-      <table className="table">
+    <section className="h-full w-full overflow-scroll object-contain">
+      <div className="mr-5">
+        <Link
+          href={`/produks/new`}
+          className="float-right font-bold font-serif py-1 px-2 my-2 rounded-lg inline-block group"
+        >
+          <span className="relative z-10 block px-5 py-2 overflow-hidden leading-tight text-white transition-colors duration-300 ease-out  rounded-lg ">
+            <span className="absolute inset-0 w-full h-full px-5 py-2 rounded-lg bg-green-600"></span>
+            <span className="absolute left-0 w-56 h-48 -ml-2 transition-all duration-300 origin-top-right -rotate-90 -translate-x-full translate-y-12 bg-blue-400 group-hover:-rotate-180 ease"></span>
+            <span className="relative">Tambah Produk baru</span>
+          </span>
+        </Link>
+      </div>
+      <table className="table w-full h-full">
         <thead className="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr className="items-start ">
             <th className="px-2">Nama Produk</th>
@@ -42,6 +53,12 @@ const Produk = () => {
           <>
             <tbody className="w-full flex-wrap">
               {daftarProduk.map((produk) => {
+                const addPriceDot = () => {
+                  return produk.price
+                    ?.toString()
+                    .match(/.{1,3}/g)
+                    .join(".");
+                };
                 return (
                   <tr
                     className=" odd:bg-gray-900 even:bg-black py-3"
@@ -52,7 +69,7 @@ const Produk = () => {
                     </td>
                     {/* Harga */}
                     <td className="table-content text-slate-500 border-r-2">
-                      Rp. {produk.price.toString()}
+                      Rp. {addPriceDot()}
                     </td>
                     {/* Deskripsi */}
                     <td className="table-content text-slate-500 border-r-2 ">
@@ -61,7 +78,7 @@ const Produk = () => {
                     {/* Gambar */}
                     <td className="table-content text-white border-b border-r-2 border-gray-700 object-contain">
                       <div className=" max-w-full h-auto items-center justify-center gap-3">
-                        {produk.imgurl.map((url: string) => {
+                        {produk.images.map((url: string) => {
                           return (
                             <div
                               key={url}
@@ -75,7 +92,7 @@ const Produk = () => {
                                   // width={200}
                                   // height={200}
                                   // className="w-52 h-52"
-                                  key={produk.imgurl}
+                                  key={produk.images}
                                 />
                               ) : (
                                 ""
@@ -117,13 +134,7 @@ const Produk = () => {
           </>
         )}
       </table>
-      <Link
-        href={`/produks/new`}
-        className="absolute right-5 bg-black text-white py-1 px-2 rounded-lg"
-      >
-        Tambah produk baru
-      </Link>
-    </div>
+    </section>
   );
 };
 

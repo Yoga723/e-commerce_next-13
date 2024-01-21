@@ -3,15 +3,19 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { UploadImgProps } from "@/types";
 
-const UploadImg = ({ produkData, imageData, setImageData }: UploadImgProps) => {
+const UploadImg = ({
+  produkData,
+  imagesLink,
+  setImageData,
+}: UploadImgProps) => {
   const [imagePreview, setImagePreview] = useState<File[]>([]);
-  const [imagePreviewLink, setImagePreviewLink] = useState([]); // Link gambar dari cloudinary
+  const [imagePreviewLink, setImagePreviewLink] = useState <string[]>([]); // Link gambar dari cloudinary
 
   useEffect(() => {
-    if (imageData) {
-      setImagePreviewLink!(imageData);
+    if (imagesLink) {
+      setImagePreviewLink!(imagesLink);
     }
-  }, [produkData, imageData]);
+  }, [produkData, imagesLink]);
 
   // Convert file images jadi formdata dan di masukkan ke imageData
   const uploadImage = async (e: any) => {
@@ -61,7 +65,7 @@ const UploadImg = ({ produkData, imageData, setImageData }: UploadImgProps) => {
           onChange={uploadImage}
           className="hidden"
         />
-        {/* Mapping dam preview image yang akan di upload */}
+        {/* Mapping dan preview image yang akan di upload */}
         <div className="absolute flex h-full w-full object-contain items-start justify-start ">
           {imagePreview.length < 1
             ? imagePreviewLink.map((image) => {
@@ -80,7 +84,7 @@ const UploadImg = ({ produkData, imageData, setImageData }: UploadImgProps) => {
                 );
               })
             : Array.from(imagePreview).map((image) => {
-              //isi imagePreview jiga kie = FileList [ File ] = 0: File { name: "AplhaCW.jpg", lastModified: 1689848975806, size: 1889575, … }
+                //isi imagePreview jiga kie = FileList [ File ] = 0: File { name: "AplhaCW.jpg", lastModified: 1689848975806, size: 1889575, … }
                 const src = URL.createObjectURL(image);
                 return (
                   <div
@@ -99,11 +103,6 @@ const UploadImg = ({ produkData, imageData, setImageData }: UploadImgProps) => {
         </div>
       </label>
 
-      <div className="flex flex-row max-w-md max-h-md relative"></div>
-      {produkData?.images == undefined ||
-        (!produkData?.images.length && (
-          <div>Tidak ada photo untuk produk ini !</div>
-        ))}
     </div>
   );
 };

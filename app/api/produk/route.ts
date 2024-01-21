@@ -7,15 +7,25 @@ export const POST = async (req: any, res: any) => {
   const { title, description, price, images } = await req.json(); // Dekonstruksikan data yang dikirim dari new
   mongooseConnect();
 
+  let produkData: any = {
+    title,
+    description,
+    price,
+  };
+
+  // Tambah key/property images jika ada
+  if (images && images.length > 0) {
+    produkData.images = images;
+  }
+
+  if (price.length < 1) {
+    produkData.price = 0;
+  }
+
   try {
-    const produkData = await Produk.create({
-      title,
-      description,
-      price,
-      images,
-    });
+    const sendData = await Produk.create(produkData);
     console.log("POST REQUEST DONE");
-    return NextResponse.json(produkData);
+    return NextResponse.json(sendData);
   } catch (error: any) {
     console.error("Error saving to database:", error.message);
     return NextResponse.json({ success: false, message: error.message });
@@ -26,13 +36,25 @@ export const PUT = async (req: any, res: any) => {
   mongooseConnect();
   const { title, description, price, images, _id } = await req.json(); // Dekonstruksikan data yang dikirim dari new
 
-  try {
-    const updatedProdukData = await Produk.updateOne(
-      { _id: _id },
-      { title: title, description: description, price: price, images: images }
-    );
+  let updateProdukData: any = {
+    title: title,
+    description: description,
+    price: price,
+  };
 
-    return NextResponse.json(updatedProdukData); // Responsena teh jang nga bejaan axios.put() bahwa data ges ka kirim
+  // Tambah key/property images jika ada
+  if (images && images.length > 0) {
+    updateProdukData.images = images;
+  }
+
+  if (price.length < 1) {
+    updateProdukData.price = 0;
+  }
+
+  try {
+    const sendData = await Produk.updateOne({ _id: _id }, updateProdukData);
+
+    return NextResponse.json(sendData); // Responsena teh jang nga bejaan axios.put() bahwa data ges ka kirim
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message });
   }

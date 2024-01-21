@@ -12,7 +12,7 @@ const EditProduk = ({ params }: { params: { id: string } }) => {
     title: "",
     description: "",
     price: 0,
-    imgurl: undefined,
+    images: undefined,
     __v: 0,
   });
 

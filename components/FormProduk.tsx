@@ -5,14 +5,16 @@ import React, { useEffect, useState } from "react";
 import UploadImg from "./UploadImg";
 import { FormMethodProps } from "@/types";
 import { useRouter } from "next/navigation";
-import { Navigation } from ".";
+import { Loader, Navigation } from ".";
 
 const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [imagesLink, setImagesLink] = useState<string[]>([]); // Link ini hanya untuk preview aja di input images
+  const [upstatus, setUpstatus] = useState(false);
   const [imageData, setImageData] = useState<FormData | null>(null);
-  // Contoh Isi dari statenya : File { name: "AlphaCWPlume.jpg", lastModified: 1689848943250, webkitRelativePath: "", size: 1752841, type: "image/jpeg" }
+  // Contoh Isi dari state imageData : FormData { file { name: "AlphaCWPlume.jpg", lastModified: 1689848943250, webkitRelativePath: "", size: 1752841, type: "image/jpeg" } }
   const router = useRouter();
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       setTitle(produkData.title || "");
       setDescription(produkData.description || "");
       setPrice(produkData.price.toString() || "");
-      setImageData(produkData.images || "");
+      setImagesLink(produkData.images || "");
     }
   }, [produkData]);
 
@@ -32,11 +34,13 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
     const _id = produkData?._id;
 
     try {
-      alert("Data sedang dikirim, akan segera kembali ke halaman produk!");
       // Jika methodnya POST
+      alert("Data sedang dikirim, akan segera kembali ke halaman produk!");
+      setUpstatus(true);
 
       // Upload Gambar - gambar jika ada
       if (imageData != null) {
+        console.log("ini adalah imageData:", imageData);
         const response = await fetch("/api/uploadimages", {
           method: "POST",
           body: imageData,
@@ -51,6 +55,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
         images = imageUrls;
       }
 
+      // Edit payload imagesna meh men kosong di skip, ie men kosong bakal di replace data dina mongodbna
       const payload = { title, description, price, images };
 
       if (FormMethod == "POST") {
@@ -62,25 +67,34 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
       }
     } catch (err) {
       if (err instanceof AxiosError) {
-        if (
-          err.response?.status === 400 &&
-          err.response?.data.code === "CATEGORY_ALREADY_EXIST"
-        ) {
+        if (err.response?.status === 400) {
           console.log("Category exists");
         }
       } else {
         console.log("Unexpected error", err);
       }
     } finally {
+      setUpstatus(false);
       router.push("/produks");
     }
   };
 
   return (
-    <div className="flex h-screen object-contain">
-      <Navigation />
-      <div className=" w-screen h-full p-3 text-black bg-slate-500">
-        <h1 className="font-bold text-xl mb-2">{FormMethod == "POST" ? "Tambah Produk" : "Edit Produk"} :</h1>
+    <section className="flex h-screen object-contain">
+      {upstatus ? (
+        <div className="flex absolute z-10 items-center justify-center w-full h-full bg-opacity-40 bg-gray-400">
+          <Loader />
+        </div>
+      ) : (
+        ""
+      )}
+      <div>
+        <Navigation />
+      </div>
+      <div className="w-screen h-full p-3 text-black bg-slate-500">
+        <h1 className="font-bold text-xl mb-2">
+          {FormMethod == "POST" ? "Tambah Produk" : "Edit Produk"} :
+        </h1>
         <form onSubmit={handleSubmit}>
           <label
             htmlFor="produk"
@@ -99,7 +113,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
             htmlFor="price"
             className="form-produk-title"
           >
-            Price (Rp.):
+            Price Rp.(123456789):
           </label>
           <input
             type="number"
@@ -117,6 +131,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
           <textarea
             placeholder="description"
             value={description}
+            className=""
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           <label
@@ -125,9 +140,13 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
           >
             Photo :
           </label>
+          <h2 className="text-red-400 text-base">
+            Bila ingin menambahkan photo baru, masukkan juga photo sebelumnya
+            untuk di upload !
+          </h2>
           <UploadImg
             produkData={produkData}
-            imageData={imageData}
+            imagesLink={imagesLink}
             setImageData={setImageData}
           />
           <div className="my-4">
@@ -149,7 +168,7 @@ const FormProduk = ({ FormMethod, produkData }: FormMethodProps) => {
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 
